@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Registro Prof - Login e Registro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1f1f1f;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header span {
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    input,
+    select,
+    button,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+      background-color: #2a2a2a;
+      color: #fff;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #3b82f6;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      background-color: #2a2a2a;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .vote-info {
+      max-width: 85%;
+    }
+
+    .remove-btn {
+      background-color: #ef4444;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .remove-btn:hover {
+      background-color: #b91c1c;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      color: #4ade80;
+      display: none;
+    }
+
+    .error-message {
+      color: #ef4444;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .section-title {
+      margin-top: 30px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    #logout-btn {
+      margin-top: 20px;
+      background-color: #ef4444;
+    }
+
+    /* Nuovi stili per la dashboard iniziale */
+    #dashboard {
+      margin-top: 20px;
+    }
+
+    /* ✅ PRESENZE MIGLIORATE GRAFICAMENTE */
+    .alunno-status {
+      background-color: #262626;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    .alunno-status:hover {
+      background-color: #333;
+    }
+
+    .alunno-status span {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .alunno-status input[type="checkbox"] {
+      transform: scale(1.4);
+      accent-color: #4ade80;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #3b82f6;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: 600;
+      transition: background 0.3s;
+      width: auto;
+    }
+
+    .btn-primary:hover {
+      background-color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <h1>📘 Registro Elettronico Prof</h1>
+        <span>Accesso riservato al personale docente</span>
+    </header>
+
+    <div class="container">
+
+        <!-- LOGIN FORM -->
+        <form id="login-form">
+            <div class="section-title">Login</div>
+            <label>Username:</label>
+            <input type="text" id="login-username" placeholder="Es. rossi123" required />
+            <label>Password:</label>
+            <input type="password" id="login-password" placeholder="Password" required />
+            <button type="submit">Accedi</button>
+            <div class="error-message" id="login-error"></div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="register-form" style="margin-top: 30px;">
+            <div class="section-title">Registrazione</div>
+            <label>Username:</label>
+            <input type="text" id="register-username" placeholder="Es. rossi123" required />
+            <label>Password:</label>
+            <input type="password" id="register-password" placeholder="Password" required />
+            <button type="submit">Registrati</button>
+            <div class="message" id="register-success">✅ Registrazione avvenuta con successo! Ora effettua il login.</div>
+            <div class="error-message" id="register-error"></div>
+        </form>
+
+        <!-- SEZIONE DASHBOARD (nascondi fino a login) -->
+        <div id="dashboard" style="display:none;">
+            <div class="section-title">Benvenuto, <span id="nome-prof"></span></div>
+            <button id="logout-btn">Logout</button>
+
+            <div class="section-title">Appello: Presenze degli alunni</div>
+            <div id="appello-list">
+                <!-- Lista alunni con presenza -->
+            </div>
+
+            <div class="section-title">Note importanti</div>
+            <div id="note-section" style="background-color:#2a2a2a; padding:10px; border-radius:5px; min-height:60px;">
+                <em>Nessuna nota per ora.</em>
+            </div>
+
+            <button id="show-voti-btn" class="btn-primary">Vai alla sezione voti</button>
+        </div>
+
+        <!-- SEZIONE DEL REGISTRO (nascondi fino a login e fino a click) -->
+        <div id="registro-section" style="display:none; margin-top: 20px;">
+
+            <div class="section-title">Gestione Voti</div>
+
+            <form id="voto-form" style="margin-top:20px;">
+                <label>Studente:</label>
+                <select id="studente" required>
+                    <!-- opzioni generate da JS -->
+                </select>
+
+                <label>Materia:</label>
+                <select id="materia" required>
+                    <option value="">Seleziona materia</option>
+                    <option value="Matematica">Matematica</option>
+                    <option value="Italiano">Italiano</option>
+                    <option value="Storia">Storia</option>
+                    <option value="Scienze">Scienze</option>
+                    <option value="Inglese">Inglese</option>
+                    <option value="Geografia">Geografia</option>
+                </select>
+
+                <label>Voto (0 - 100):</label>
+                <input type="number" id="voto" min="0" max="100" placeholder="Inserisci voto" required />
+
+                <label>Nota (opzionale):</label>
+                <textarea id="nota" rows="2" placeholder="Aggiungi una nota sul voto"></textarea>
+
+                <button type="submit">Salva voto</button>
+            </form>
+
+            <div class="message" id="msg-success">✅ Voto salvato correttamente!</div>
+
+            <div class="section-title">Storico voti inseriti</div>
+            <ul id="lista-voti"></ul>
+        </div>
+    </div>
+
+    <footer>
+        Creator: <strong>Natale Ruben</strong>
+    </footer>
+
+    <script>
+        const studenti = [
+            "Luca Bianchi", "Marco Rossi", "Francesca Verdi", "Giulia Neri", "Matteo Romano",
+            "Sara Conti", "Alessandro Costa", "Chiara Ferrari", "Andrea Galli", "Elena Bruno",
+            "Simone Moretti", "Laura Greco", "Davide Rinaldi", "Martina Leone", "Federico Martini",
+            "Valentina Fontana", "Giorgio Piras", "Silvia Sala", "Roberto Colombo", "Anna Ferrara"
+        ];
+
+        let nomeProf = "";
+        let token = "";
+
+        // Stato presenza alunni (per esempio tutti assenti all'inizio)
+        let presenze = {};
+
+        // Popola la select studenti
+        function popolaStudenti() {
+            const select = document.getElementById("studente");
+            select.innerHTML = "";
+            studenti.forEach(nome => {
+                const option = document.createElement("option");
+                option.value = nome;
+                option.textContent = nome;
+                select.appendChild(option);
+            });
+        }
+
+        // Popola lista appello con checkbox per presenza
+        function mostraAppello() {
+            const appelloDiv = document.getElementById("appello-list");
+            appelloDiv.innerHTML = "";
+            studenti.forEach(nome => {
+                // Se non c'è ancora stato un valore per questo studente, assumo assente (false)
+                if (!(nome in presenze)) presenze[nome] = false;
+
+                const div = document.createElement("div");
+                div.className = "alunno-status";
+
+                const nameSpan = document.createElement("span");
+                nameSpan.textContent = nome;
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.checked = presenze[nome];
+                checkbox.addEventListener("change", () => {
+                    presenze[nome] = checkbox.checked;
+                });
+
+                div.appendChild(nameSpan);
+                div.appendChild(checkbox);
+
+                appelloDiv.appendChild(div);
+            });
+        }
+
+        popolaStudenti();
+
+        // Mostra messaggio di errore
+        function mostraErrore(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.style.display = "block";
+        }
+        // Nascondi messaggio errore
+        function nascondiErrore(id) {
+            const el = document.getElementById(id);
+            el.style.display = "none";
+        }
+
+        // Mostra messaggio di successo
+        function mostraMessaggio(id) {
+            const msg = document.getElementById(id);
+            msg.style.display = "block";
+            setTimeout(() => {
+                msg.style.display = "none";
+            }, 2500);
+        }
+
+        // REGISTRAZIONE
+        document.getElementById("register-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            nascondiErrore("register-error");
+
+            const username = document.getElementById("register-username").value.trim();
+            const password = document.getElementById("register-password").value;
+
+            if (!username || !password) {
+                mostraErrore("register-error", "Inserisci username e password.");
+                return;
+            }
+
+            try {
+                const res = await fetch("http://localhost:3000/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    mostraMessaggio("register-success");
+                    document.getElementById("register-form").reset();
+                } else {
+                    mostraErrore("register-error", data.msg || "Errore nella registrazione.");
+                }
+            } catch (err) {
+                mostraErrore("register-error", "Errore di connessione al server.");
+            }
+        });
+
+        // LOGIN
+        document.getElementById("login-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            nascondiErrore("login-error");
+
+            const username = document.getElementById("login-username").value.trim();
+            const password = document.getElementById("login-password").value;
+
+            if (!username || !password) {
+                mostraErrore("login-error", "Inserisci username e password.");
+                return;
+            }
+
+            try {
+                const res = await fetch("http://localhost:3000/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    token = data.token;
+                    nomeProf = username;
+                    document.getElementById("nome-prof").textContent = nomeProf;
+
+                    // Nascondi form login e registrazione
+                    document.getElementById("login-form").style.display = "none";
+                    document.getElementById("register-form").style.display = "none";
+
+                    // Mostra dashboard iniziale (con appello, note)
+                    document.getElementById("dashboard").style.display = "block";
+
+                    mostraAppello();
+                } else {
+                    mostraErrore("login-error", data.msg || "Errore nel login.");
+                }
+            } catch (err) {
+                mostraErrore("login-error", "Errore di connessione al server.");
+            }
+        });
+
+        // LOGOUT
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            token = "";
+            nomeProf = "";
+            document.getElementById("registro-section").style.display = "none";
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("login-form").style.display = "block";
+            document.getElementById("register-form").style.display = "block";
+            document.getElementById("login-form").reset();
+            document.getElementById("register-form").reset();
+            document.getElementById("lista-voti").innerHTML = "";
+        });
+
+        // Bottone per mostrare la sezione voti
+        document.getElementById("show-voti-btn").addEventListener("click", () => {
+            document.getElementById("dashboard").style.display = "none";
+            document.getElementById("registro-section").style.display = "block";
+            caricaVoti();
+        });
+
+        // Carica voti (richiesta protetta con token)
+        async function caricaVoti() {
+            if (!token) return;
+
+            try {
+                const res = await fetch("http://localhost:3000/voti", {
+                    headers: { "Authorization": "Bearer " + token }
+                });
+
+                if (!res.ok) {
+                    alert("Errore nel caricamento voti. Effettua nuovamente il login.");
+                    document.getElementById("logout-btn").click();
+                    return;
+                }
+
+                const dati = await res.json();
+                const lista = document.getElementById("lista-voti");
+                lista.innerHTML = "";
+
+                dati.forEach((item) => {
+                    const li = document.createElement("li");
+
+                    const infoDiv = document.createElement("div");
+                    infoDiv.className = "vote-info";
+
+                    let text = `${item.studente} - ${item.materia} - voto: ${item.voto}`;
+                    if (item.nota) {
+                        text += ` (Nota: ${item.nota})`;
+                    }
+                    text += ` - inserito da: ${item.prof}`;
+                    infoDiv.textContent = text;
+
+                    const removeBtn = document.createElement("button");
+                    removeBtn.className = "remove-btn";
+                    removeBtn.textContent = "Elimina";
+                    removeBtn.addEventListener("click", async () => {
+                        if (confirm("Sei sicuro di voler eliminare questo voto?")) {
+                            const delRes = await fetch(`http://localhost:3000/voti/${item._id}`, {
+                                method: "DELETE",
+                                headers: { "Authorization": "Bearer " + token }
+                            });
+
+                            if (delRes.ok) {
+                                caricaVoti();
+                            } else {
+                                alert("Errore durante l'eliminazione.");
+                            }
+                        }
+                    });
+
+                    li.appendChild(infoDiv);
+                    li.appendChild(removeBtn);
+                    lista.appendChild(li);
+                });
+            } catch (err) {
+                alert("Errore nella connessione al server.");
+            }
+        }
+
+        // Gestione submit form voto
+        document.getElementById("voto-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            if (!token) {
+                alert("Effettua il login prima.");
+                return;
+            }
+
+            const studente = document.getElementById("studente").value;
+            const materia = document.getElementById("materia").value;
+            const voto = Number(document.getElementById("voto").value);
+            const nota = document.getElementById("nota").value.trim();
+
+            if (!studente || !materia || isNaN(voto) || voto < 0 || voto > 100) {
+                alert("Inserisci dati validi.");
+                return;
+            }
+
+            try {
+                const res = await fetch("http://localhost:3000/voti", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+                    body: JSON.stringify({ studente, materia, voto, nota })
+                });
+
+                if (res.ok) {
+                    mostraMessaggio("msg-success");
+                    document.getElementById("voto-form").reset();
+                    caricaVoti();
+                } else {
+                    const data = await res.json();
+                    alert(data.msg || "Errore durante il salvataggio del voto.");
+                }
+            } catch (err) {
+                alert("Errore di connessione al server.");
+            }
+        });
+    </script>
+</body>
+</html>
